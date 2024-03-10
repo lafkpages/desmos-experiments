@@ -1,0 +1,20 @@
+{
+  "name": "obj-to-desmos",
+  "module": "src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
+    "@types/bun": "latest",
+    "@types/obj-file-parser": "^0.5.2",
+    "prettier": "^3.2.5"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "obj-file-parser": "^0.6.2"
+  },
+  "scripts": {
+    "format": "bun run --bun prettier --write ."
+  }
+}
