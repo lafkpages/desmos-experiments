@@ -12,6 +12,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "enquirer": "^2.4.1",
     "obj-file-parser": "^0.6.2"
   },
   "scripts": {
