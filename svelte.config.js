@@ -18,7 +18,13 @@ const config = {
         "font-src": ["data:"],
 
         // unsafe-eval and blob: are required for Desmos
-        "script-src": ["self", "https://www.desmos.com", "unsafe-eval", "blob:"],
+        "script-src": [
+          "self",
+          "https://va.vercel-scripts.com",
+          "https://www.desmos.com",
+          "unsafe-eval",
+          "blob:",
+        ],
       },
     },
   },
