@@ -7,28 +7,7 @@ const otherAxes = {
   z: ["x", "y"],
 } satisfies Record<(typeof axes)[number], [(typeof axes)[number], (typeof axes)[number]]>;
 
-export function generateEquations(objSource: string, modelName?: string) {
-  const objFile = new OBJFile(objSource);
-  const objData = objFile.parse();
-
-  if (objData.models.length == 0) {
-    throw new Error("OBJ file has no models.");
-  }
-
-  let model: OBJFile.ObjModel;
-
-  if (modelName) {
-    model = objData.models.find((model) => model.name == modelName)!;
-  } else if (objData.models.length == 1) {
-    model = objData.models[0];
-  } else {
-    throw new Error("OBJ file has more than one model.");
-  }
-
-  if (!model) {
-    throw new Error("OBJ model not found");
-  }
-
+export function generateEquations(model: OBJFile.ObjModel) {
   const vertices = axes.map(
     (axis) =>
       `${axis}_{0}=\\left[` + model.vertices.map((vertex) => vertex[axis]).join(",") + "\\right]",

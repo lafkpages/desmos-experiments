@@ -2,8 +2,10 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join as joinPaths } from "node:path";
 
-import { generateEquations } from "$lib";
 import Enquirer from "enquirer";
+import ObjFileParser from "obj-file-parser";
+
+import { generateEquations } from "$lib";
 
 const homeDir = homedir();
 const filePath = joinPaths(homeDir, "Downloads/untitled.obj");
@@ -21,7 +23,32 @@ try {
   fileContents = await readFile(filePathPrompt.filePath, "utf-8");
 }
 
-const equations = generateEquations(fileContents);
+const objFile = new ObjFileParser(fileContents);
+const objData = objFile.parse();
+
+if (objData.models.length < 1) {
+  console.error("No models found in the OBJ file.");
+  process.exit(1);
+}
+
+let model: ObjFileParser.ObjModel;
+if (objData.models.length == 1) {
+  model = objData.models[0];
+} else {
+  const modelPrompt = await Enquirer.prompt<{ model: string }>({
+    type: "select",
+    name: "model",
+    message: "Select a model:",
+    choices: objData.models.map((model, index) => ({
+      name: index.toString(),
+      message: model.name,
+    })),
+  });
+
+  model = objData.models[modelPrompt.model as unknown as number];
+}
+
+const equations = generateEquations(model);
 
 await mkdir("dist/equations", { recursive: true });
 await writeFile("dist/equations/vertices.txt", equations.vertices.join("\n"));

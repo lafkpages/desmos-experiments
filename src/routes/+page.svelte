@@ -9,7 +9,21 @@
 <script lang="ts">
   import "$types/desmos.d.ts";
 
+  import type { ObjFile, ObjModel } from "obj-file-parser";
+
   import { onMount, tick } from "svelte";
+
+  import {
+    Button,
+    Dropdown,
+    DropdownItem,
+    Fileupload,
+    Heading,
+    Modal,
+    Spinner,
+  } from "flowbite-svelte";
+  import { ChevronDownSolid } from "flowbite-svelte-icons";
+  import ObjFileParser from "obj-file-parser";
 
   import { generateEquations } from "$lib";
   import { setupCalculator } from "$lib/calculator";
@@ -17,9 +31,15 @@
   let calculatorElm: HTMLDivElement;
   let calculator: any;
 
-  let obj = "";
+  let objSource = "";
+  let objData: ObjFile;
+  let objModel: ObjModel;
 
-  let showLoading = false;
+  let loadingModal = false;
+  let multipleModelsModal = false;
+  let errorModal = false;
+  let errorModalMessage = "";
+
   let didSetup = false;
 
   function onLoadMount() {
@@ -34,140 +54,133 @@
     setupCalculator(calculator);
   }
   onMount(onLoadMount);
+
+  async function onFileUpload(e: Event) {
+    const objFile = (e.currentTarget as HTMLInputElement).files?.[0];
+
+    if (!objFile) {
+      return;
+    }
+
+    loadingModal = true;
+
+    await tick();
+
+    setTimeout(async () => {
+      try {
+        objSource = await objFile.text();
+        objData = new ObjFileParser(objSource).parse();
+
+        if (objData.models.length < 0) {
+          throw new Error("No models found in file");
+        }
+
+        if (objData.models.length == 1) {
+          objModel = objData.models[0];
+        } else {
+          loadingModal = false;
+          multipleModelsModal = true;
+          return;
+        }
+
+        loadModel();
+
+        loadingModal = false;
+      } catch (err) {
+        console.error(err);
+
+        loadingModal = false;
+
+        errorModal = true;
+        errorModalMessage = err?.toString() || "An error occurred";
+      }
+    }, 100);
+  }
+
+  function loadModel() {
+    const equations = generateEquations(objModel);
+
+    console.log(equations);
+
+    // remove face expressions
+    calculator.removeExpressions(
+      calculator.getExpressions().filter((e) => e.id.startsWith("face")),
+    );
+
+    // replace vertex and rotated vertex expressions
+    calculator.setExpressions([
+      { id: "x0", latex: equations.vertices[0] },
+      { id: "y0", latex: equations.vertices[1] },
+      { id: "z0", latex: equations.vertices[2] },
+      { id: "x1", latex: equations.rotatedVertices[0] },
+      { id: "y1", latex: equations.rotatedVertices[1] },
+      { id: "z1", latex: equations.rotatedVertices[2] },
+      { id: "x2", latex: equations.rotatedVertices[3] },
+      { id: "y2", latex: equations.rotatedVertices[4] },
+      { id: "z2", latex: equations.rotatedVertices[5] },
+      { id: "x3", latex: equations.rotatedVertices[6] },
+      { id: "y3", latex: equations.rotatedVertices[7] },
+      { id: "z3", latex: equations.rotatedVertices[8] },
+    ]);
+
+    // add face expressions
+    calculator.setExpressions(
+      equations.faces.map((f, i) => ({
+        id: `face${i}`,
+        latex: f,
+        folderId: "projectedFaces",
+      })),
+    );
+  }
 </script>
 
 <svelte:window on:load={onLoadMount} />
 
-<div class="main">
-  <h1>OBJ to Desmos</h1>
+<div class="flex flex-col gap-4 p-4 size-full">
+  <Heading tag="h1">OBJ to Desmos</Heading>
 
   <p>Converts an OBJ file into Desmos equations.</p>
 
-  <input
-    type="file"
-    accept=".obj"
-    on:input={async (e) => {
-      const file = e.currentTarget.files?.[0];
+  <Fileupload type="file" accept=".obj" on:change={onFileUpload} />
 
-      if (!file) {
-        return;
-      }
-
-      showLoading = true;
-
-      await tick();
-
-      setTimeout(async () => {
-        try {
-          obj = await file.text();
-
-          const equations = generateEquations(obj);
-
-          // remove face expressions
-          calculator.removeExpressions(
-            calculator.getExpressions().filter((e) => e.id.startsWith("face")),
-          );
-
-          // replace vertex and rotated vertex expressions
-          calculator.setExpressions([
-            { id: "x0", latex: equations.vertices[0] },
-            { id: "y0", latex: equations.vertices[1] },
-            { id: "z0", latex: equations.vertices[2] },
-            { id: "x1", latex: equations.rotatedVertices[0] },
-            { id: "y1", latex: equations.rotatedVertices[1] },
-            { id: "z1", latex: equations.rotatedVertices[2] },
-            { id: "x2", latex: equations.rotatedVertices[3] },
-            { id: "y2", latex: equations.rotatedVertices[4] },
-            { id: "z2", latex: equations.rotatedVertices[5] },
-            { id: "x3", latex: equations.rotatedVertices[6] },
-            { id: "y3", latex: equations.rotatedVertices[7] },
-            { id: "z3", latex: equations.rotatedVertices[8] },
-          ]);
-
-          // add face expressions
-          calculator.setExpressions(
-            equations.faces.map((f, i) => ({
-              id: `face${i}`,
-              latex: f,
-              folderId: "projectedFaces",
-            })),
-          );
-
-          showLoading = false;
-        } catch (err) {
-          console.error(err);
-          showLoading = false;
-          alert(`Error parsing file:\n${err}`);
-        }
-      }, 100);
-    }}
-  />
-
-  <div class="calculator" bind:this={calculatorElm} />
+  <div class="flex-grow" bind:this={calculatorElm} />
 </div>
 
-<div class="loading-overlay" class:show={showLoading}>
-  <h2>Loading</h2>
-  <span></span>
-</div>
+<Modal title="Loading" bind:open={loadingModal}>
+  <p>
+    <Spinner class="mr-4" />
+    Importing your 3D model... This might take a while...
+  </p>
+</Modal>
 
-<style lang="scss">
-  .main {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-    width: 100%;
-    height: 100%;
+<Modal title="Multiple models" bind:open={multipleModelsModal}>
+  <p>Looks like your OBJ file contains multiple models. Please select one.</p>
 
-    * {
-      margin: 0px;
-    }
+  <Button>
+    Choose a model
 
-    .calculator {
-      flex-grow: 1;
-    }
-  }
+    <ChevronDownSolid class="w-3 h-3 ms-2" />
+  </Button>
+  <Dropdown>
+    {#each objData.models as model}
+      <DropdownItem
+        on:click={async () => {
+          objModel = model;
 
-  .loading-overlay {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    gap: 1rem;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+          loadingModal = true;
+          multipleModelsModal = false;
 
-    &.show {
-      display: flex;
-    }
+          await tick();
 
-    h2 {
-      margin: 0px;
-      color: white;
-    }
+          loadModel();
 
-    span {
-      display: block;
-      width: 100px;
-      height: 100px;
-      border: 10px solid #f3f3f3;
-      border-top: 10px solid #3498db;
-      border-radius: 50%;
-      animation: spin 2s linear infinite;
-    }
+          loadingModal = false;
+        }}>{model.name}</DropdownItem
+      >
+    {/each}
+  </Dropdown>
+</Modal>
 
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-  }
-</style>
+<Modal title="Error" bind:open={errorModal}>
+  <p>{errorModalMessage}</p>
+</Modal>
