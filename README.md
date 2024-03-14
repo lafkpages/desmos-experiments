@@ -1,6 +1,6 @@
 # obj-to-desmos
 
-Converts an OBJ file into Desmos equations that can be plugged into [this graph](https://www.desmos.com/calculator/mylvmnjbpo).
+Converts an OBJ file into Desmos equations.
 
 To install dependencies:
 
