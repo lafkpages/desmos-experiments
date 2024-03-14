@@ -16,7 +16,9 @@ const config = {
     csp: {
       directives: {
         "font-src": ["data:"],
-        "script-src": ["https://www.desmos.com", "unsafe-eval", "blob:"],
+
+        // unsafe-eval and blob: are required for Desmos
+        "script-src": ["self", "https://www.desmos.com", "unsafe-eval", "blob:"],
       },
     },
   },
