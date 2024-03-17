@@ -263,45 +263,10 @@ export function setupCalculator(calculator: any) {
         },
         {
           type: "expression",
-          id: "face1",
+          id: "faces",
           folderId: "projectedFaces",
           latex:
-            "\\operatorname{polygon}\\left(p\\left[1\\right],p\\left[5\\right],p\\left[7\\right],p\\left[3\\right]\\right)",
-        },
-        {
-          type: "expression",
-          id: "face2",
-          folderId: "projectedFaces",
-          latex:
-            "\\operatorname{polygon}\\left(p\\left[4\\right],p\\left[3\\right],p\\left[7\\right],p\\left[8\\right]\\right)",
-        },
-        {
-          type: "expression",
-          id: "face3",
-          folderId: "projectedFaces",
-          latex:
-            "\\operatorname{polygon}\\left(p\\left[8\\right],p\\left[7\\right],p\\left[5\\right],p\\left[6\\right]\\right)",
-        },
-        {
-          type: "expression",
-          id: "face4",
-          folderId: "projectedFaces",
-          latex:
-            "\\operatorname{polygon}\\left(p\\left[6\\right],p\\left[2\\right],p\\left[4\\right],p\\left[8\\right]\\right)",
-        },
-        {
-          type: "expression",
-          id: "face5",
-          folderId: "projectedFaces",
-          latex:
-            "\\operatorname{polygon}\\left(p\\left[2\\right],p\\left[1\\right],p\\left[3\\right],p\\left[4\\right]\\right)",
-        },
-        {
-          type: "expression",
-          id: "face6",
-          folderId: "projectedFaces",
-          latex:
-            "\\operatorname{polygon}\\left(p\\left[6\\right],p\\left[5\\right],p\\left[1\\right],p\\left[2\\right]\\right)",
+            "\\left[\\operatorname{polygon}\\left(p\\left[1\\right],p\\left[5\\right],p\\left[7\\right],p\\left[3\\right]\\right),\\operatorname{polygon}\\left(p\\left[4\\right],p\\left[3\\right],p\\left[7\\right],p\\left[8\\right]\\right),\\operatorname{polygon}\\left(p\\left[8\\right],p\\left[7\\right],p\\left[5\\right],p\\left[6\\right]\\right),\\operatorname{polygon}\\left(p\\left[6\\right],p\\left[2\\right],p\\left[4\\right],p\\left[8\\right]\\right),\\operatorname{polygon}\\left(p\\left[2\\right],p\\left[1\\right],p\\left[3\\right],p\\left[4\\right]\\right),\\operatorname{polygon}\\left(p\\left[6\\right],p\\left[5\\right],p\\left[1\\right],p\\left[2\\right]\\right)\\right]",
         },
       ],
     },
