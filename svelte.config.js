@@ -9,7 +9,7 @@ const config = {
     adapter: adapter(),
 
     alias: {
-      $static: "./static",
+      $assets: "./src/assets",
       $types: "./src/types",
     },
 

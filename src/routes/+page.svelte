@@ -9,32 +9,36 @@
 <script lang="ts">
   import "$types/desmos.d.ts";
 
-  import type { ObjFile, ObjModel } from "obj-file-parser";
-
   import { onMount, tick } from "svelte";
 
   import {
     Button,
+    Checkbox,
     Dropdown,
     DropdownItem,
     Fileupload,
     Heading,
+    Hr,
     Modal,
     Spinner,
   } from "flowbite-svelte";
-  import { ChevronDownSolid } from "flowbite-svelte-icons";
+  import { ChevronDownSolid, CogSolid } from "flowbite-svelte-icons";
   import ObjFileParser from "obj-file-parser";
 
+  import defaultObj from "$assets/default.obj?raw";
   import { generateEquations } from "$lib";
   import { setupCalculator } from "$lib/calculator";
 
   let calculatorElm: HTMLDivElement;
   let calculator: any;
 
-  let objSource = "";
-  let objData: ObjFile;
-  let objModel: ObjModel;
+  let objSource = defaultObj;
+  $: objData = new ObjFileParser(objSource).parse();
+  let objModelIndex = 0;
 
+  let groupFaces = false;
+
+  let settingsModal = false;
   let loadingModal = false;
   let multipleModelsModal = false;
   let errorModal = false;
@@ -69,21 +73,20 @@
     setTimeout(async () => {
       try {
         objSource = await objFile.text();
-        objData = new ObjFileParser(objSource).parse();
+
+        await tick();
 
         if (objData.models.length < 0) {
           throw new Error("No models found in file");
         }
 
         if (objData.models.length == 1) {
-          objModel = objData.models[0];
+          objModelIndex = 0;
         } else {
           loadingModal = false;
           multipleModelsModal = true;
           return;
         }
-
-        loadModel();
 
         loadingModal = false;
       } catch (err) {
@@ -98,9 +101,13 @@
   }
 
   function loadModel() {
-    const equations = generateEquations(objModel);
+    if (!calculator) {
+      return;
+    }
 
-    console.log(equations);
+    const equations = generateEquations(objData, objModelIndex, {});
+
+    console.debug(objModelIndex, objData.models[objModelIndex], equations);
 
     // remove face expressions
     calculator.removeExpressions(
@@ -123,14 +130,41 @@
       { id: "z3", latex: equations.rotatedVertices[8] },
     ]);
 
-    // add face expressions
-    calculator.setExpressions(
-      equations.faces.map((f, i) => ({
-        id: `face${i}`,
-        latex: f,
-        folderId: "projectedFaces",
-      })),
+    if (groupFaces) {
+      calculator.setExpression({
+        id: "faces",
+        latex: `\\left[${equations.faces.join(",")}\\right]`,
+      });
+    } else {
+      // add face expressions
+      calculator.setExpressions(
+        equations.faces.map((f, i) => ({
+          id: `face${i}`,
+          latex: f,
+          folderId: "projectedFaces",
+        })),
+      );
+    }
+
+    // calculate highest Z value
+    const maxZ = Math.ceil(
+      objData.models[objModelIndex].vertices.reduce((acc, v) => (v.z > acc ? v.z : acc), 0),
     );
+
+    // update focal length
+    calculator.setExpression({
+      id: "F",
+      latex: `F=${maxZ * 4}`,
+      slider: { min: (maxZ * 2).toString(), max: (maxZ * 10).toString() },
+    });
+  }
+
+  $: {
+    // reactivity
+    objModelIndex;
+    groupFaces;
+
+    loadModel();
   }
 </script>
 
@@ -142,7 +176,24 @@
 
 <Fileupload type="file" accept=".obj" on:change={onFileUpload} />
 
+<Button
+  color="alternative"
+  class="absolute top-4 right-4 !p-2"
+  on:click={() => {
+    settingsModal = true;
+  }}
+>
+  <CogSolid class="w-4 h-4" />
+</Button>
+
 <div class="flex-grow" bind:this={calculatorElm} />
+
+<Modal title="Settings" bind:open={settingsModal}>
+  <Checkbox bind:checked={groupFaces}>Group faces</Checkbox>
+
+  <Hr />
+  <Heading tag="h6">Advanced</Heading>
+</Modal>
 
 <Modal title="Loading" bind:open={loadingModal}>
   <p>
@@ -160,17 +211,15 @@
     <ChevronDownSolid class="w-3 h-3 ms-2" />
   </Button>
   <Dropdown>
-    {#each objData.models as model}
+    {#each objData.models as model, i}
       <DropdownItem
         on:click={async () => {
-          objModel = model;
+          objModelIndex = i;
 
           loadingModal = true;
           multipleModelsModal = false;
 
           await tick();
-
-          loadModel();
 
           loadingModal = false;
         }}>{model.name}</DropdownItem
