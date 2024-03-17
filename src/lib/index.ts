@@ -1,4 +1,4 @@
-import OBJFile from "obj-file-parser";
+import type { ObjFile } from "obj-file-parser";
 
 const axes = ["x", "y", "z"] as const;
 const otherAxes = {
@@ -7,50 +7,59 @@ const otherAxes = {
   z: ["x", "y"],
 } satisfies Record<(typeof axes)[number], [(typeof axes)[number], (typeof axes)[number]]>;
 
-export function generateEquations(model: OBJFile.ObjModel) {
-  const vertices = axes.map(
-    (axis) =>
-      `${axis}_{0}=\\left[` + model.vertices.map((vertex) => vertex[axis]).join(",") + "\\right]",
-  );
+export interface GenerateEquationsOptions {}
 
-  const rotatedVertices = axes
-    .map((rotationAxis, rotationAxisIndex) =>
-      axes.map((axis, axisIndex) =>
-        axis == rotationAxis
-          ? `${axis}_{${axisIndex + 1}}=${axis}_{${axisIndex}}`
-          : `${axis}_{${rotationAxisIndex + 1}}=\\left[` +
-            model.vertices
-              .map(
-                (_, i) =>
-                  `R_{${rotationAxis}${axis}}\\left(${otherAxes[rotationAxis][0]}_{${rotationAxisIndex}}\\left[${i + 1}\\right],${otherAxes[rotationAxis][1]}_{${rotationAxisIndex}}\\left[${i + 1}\\right],${rotationAxis.toUpperCase()}_{rot}\\right)`,
-              )
-              .join(",") +
-            "\\right]",
-      ),
-    )
-    .flat();
+export function generateEquations(
+  file: ObjFile,
+  modelIndex: number,
+  options?: GenerateEquationsOptions,
+) {
+  const model = file.models[modelIndex];
 
-  const faces = model.faces.map(
-    (face) =>
-      "\\operatorname{polygon}\\left(" +
-      face.vertices
-        .map((vertex) => {
-          let index: number;
-          if (vertex.vertexIndex < 0) {
-            index = model.vertices.length + vertex.vertexIndex;
-          } else {
-            index = vertex.vertexIndex;
-          }
-
-          return `p\\left[${index}\\right]`;
-        })
-        .join(",") +
-      "\\right)",
-  );
+  let vertexIndexOffset = 0;
+  for (let i = 0; i < modelIndex; i++) {
+    vertexIndexOffset += file.models[i].vertices.length;
+  }
 
   return {
-    vertices,
-    rotatedVertices,
-    faces,
+    vertices: axes.map(
+      (axis) =>
+        `${axis}_{0}=\\left[` + model.vertices.map((vertex) => vertex[axis]).join(",") + "\\right]",
+    ),
+    rotatedVertices: axes
+      .map((rotationAxis, rotationAxisIndex) =>
+        axes.map((axis, axisIndex) =>
+          axis == rotationAxis
+            ? `${axis}_{${axisIndex + 1}}=${axis}_{${axisIndex}}`
+            : `${axis}_{${rotationAxisIndex + 1}}=\\left[` +
+              model.vertices
+                .map(
+                  (_, i) =>
+                    `R_{${rotationAxis}${axis}}\\left(${otherAxes[rotationAxis][0]}_{${rotationAxisIndex}}\\left[${i + 1}\\right],${otherAxes[rotationAxis][1]}_{${rotationAxisIndex}}\\left[${i + 1}\\right],${rotationAxis.toUpperCase()}_{rot}\\right)`,
+                )
+                .join(",") +
+              "\\right]",
+        ),
+      )
+      .flat(),
+    faces: model.faces.map(
+      (face) =>
+        "\\operatorname{polygon}\\left(" +
+        face.vertices
+          .map((vertex) => {
+            const vertexIndex = vertex.vertexIndex - vertexIndexOffset;
+
+            let index: number;
+            if (vertexIndex < 0) {
+              index = model.vertices.length + vertexIndex;
+            } else {
+              index = vertexIndex;
+            }
+
+            return `p\\left[${index}\\right]`;
+          })
+          .join(",") +
+        "\\right)",
+    ),
   };
 }
