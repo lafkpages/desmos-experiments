@@ -136,15 +136,13 @@
 
 <svelte:window on:load={onLoadMount} />
 
-<div class="flex flex-col gap-4 p-4 size-full">
-  <Heading tag="h1">OBJ to Desmos</Heading>
+<Heading tag="h1">OBJ to Desmos</Heading>
 
-  <p>Converts an OBJ file into Desmos equations.</p>
+<p>Converts an OBJ file into Desmos equations.</p>
 
-  <Fileupload type="file" accept=".obj" on:change={onFileUpload} />
+<Fileupload type="file" accept=".obj" on:change={onFileUpload} />
 
-  <div class="flex-grow" bind:this={calculatorElm} />
-</div>
+<div class="flex-grow" bind:this={calculatorElm} />
 
 <Modal title="Loading" bind:open={loadingModal}>
   <p>
