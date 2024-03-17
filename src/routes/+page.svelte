@@ -36,7 +36,8 @@
   $: objData = new ObjFileParser(objSource).parse();
   let objModelIndex = 0;
 
-  let groupFaces = false;
+  // settings
+  let groupFaces = true;
 
   let settingsModal = false;
   let loadingModal = false;
