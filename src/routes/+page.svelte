@@ -159,7 +159,7 @@
 
 <P>Converts an OBJ file into Desmos equations.</P>
 
-<Fileupload type="file" accept=".obj" on:change={onFileUpload} />
+<Fileupload accept=".obj" on:change={onFileUpload} />
 
 <Button
   color="alternative"
