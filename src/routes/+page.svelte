@@ -9,7 +9,7 @@
 <script lang="ts">
   import "$types/desmos.d.ts";
 
-  import { onMount, tick } from "svelte";
+  import { tick } from "svelte";
 
   import {
     Button,
@@ -26,10 +26,10 @@
   import ObjFileParser from "obj-file-parser";
 
   import defaultObj from "$assets/default.obj?raw";
+  import Desmos from "$components/Desmos.svelte";
   import { generateEquations } from "$lib";
-  import { setupCalculator } from "$lib/calculator";
+  import { objInitialState } from "$lib/calculator";
 
-  let calculatorElm: HTMLDivElement;
   let calculator: any;
 
   let objSource = defaultObj;
@@ -44,21 +44,6 @@
   let multipleModelsModal = false;
   let errorModal = false;
   let errorModalMessage = "";
-
-  let didSetup = false;
-
-  function onLoadMount() {
-    if (!window.Desmos || didSetup) {
-      return;
-    }
-
-    calculator = window.Desmos.GraphingCalculator(calculatorElm);
-    window.__debug_calculator = calculator;
-
-    didSetup = true;
-    setupCalculator(calculator);
-  }
-  onMount(onLoadMount);
 
   async function onFileUpload(e: Event) {
     const objFile = (e.currentTarget as HTMLInputElement).files?.[0];
@@ -169,8 +154,6 @@
   }
 </script>
 
-<svelte:window on:load={onLoadMount} />
-
 <Heading tag="h1">OBJ to Desmos</Heading>
 
 <p>Converts an OBJ file into Desmos equations.</p>
@@ -187,7 +170,7 @@
   <CogSolid class="w-4 h-4" />
 </Button>
 
-<div class="flex-grow" bind:this={calculatorElm} />
+<Desmos initialState={objInitialState} bind:calculator />
 
 <Modal title="Settings" bind:open={settingsModal}>
   <Checkbox bind:checked={groupFaces}>Group faces</Checkbox>
