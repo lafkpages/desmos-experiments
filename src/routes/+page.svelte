@@ -20,6 +20,7 @@
     Heading,
     Hr,
     Modal,
+    P,
     Spinner,
   } from "flowbite-svelte";
   import { ChevronDownSolid, CogSolid } from "flowbite-svelte-icons";
@@ -156,7 +157,7 @@
 
 <Heading tag="h1">OBJ to Desmos</Heading>
 
-<p>Converts an OBJ file into Desmos equations.</p>
+<P>Converts an OBJ file into Desmos equations.</P>
 
 <Fileupload type="file" accept=".obj" on:change={onFileUpload} />
 
