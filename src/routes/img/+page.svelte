@@ -126,19 +126,34 @@
 
         switch (shape.type) {
           case ShapeTypes.ELLIPSE: {
-            const { x, y, rx, ry } = shape.shape;
+            let { x, y, rx, ry } = shape.shape;
+
+            // flip across Y axis
+            y = image.height - y;
+
             latex = `\\left(\\frac{1}{${rx}}^{2}\\right)\\left(x-\\left(${x}\\right)\\right)^{2}+\\left(\\frac{1}{${ry}}^{2}\\right)\\left(y-\\left(${y}\\right)\\right)^{2}<1`;
             break;
           }
 
           case ShapeTypes.RECTANGLE: {
-            const { x1, y1, x2, y2 } = shape.shape;
+            let { x1, y1, x2, y2 } = shape.shape;
+
+            // flip across Y axis
+            y1 = image.height - y1;
+            y2 = image.height - y2;
+
             latex = `\\operatorname{polygon}\\left(\\left(${x1},${y1}\\right),\\left(${x2},${y1}\\right),\\left(${x2},${y2}\\right),\\left(${x1},${y2}\\right)\\right)`;
             break;
           }
 
           case ShapeTypes.TRIANGLE: {
-            const { x1, y1, x2, y2, x3, y3 } = shape.shape;
+            let { x1, y1, x2, y2, x3, y3 } = shape.shape;
+
+            // flip across Y axis
+            y1 = image.height - y1;
+            y2 = image.height - y2;
+            y3 = image.height - y3;
+
             latex = `\\operatorname{polygon}\\left(\\left(${x1},${y1}\\right),\\left(${x2},${y2}\\right),\\left(${x3},${y3}\\right)\\right)`;
             break;
           }
