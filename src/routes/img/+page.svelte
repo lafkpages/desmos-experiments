@@ -6,6 +6,8 @@
 
   import {
     Button,
+    ButtonGroup,
+    Checkbox,
     Fileupload,
     Heading,
     Hr,
@@ -15,12 +17,19 @@
     P,
     Progressbar,
   } from "flowbite-svelte";
-  import { CogSolid } from "flowbite-svelte-icons";
+  import {
+    CloseSolid,
+    CogSolid,
+    ForwardStepSolid,
+    PauseSolid,
+    PlaySolid,
+  } from "flowbite-svelte-icons";
   import { ShapeTypes } from "geometrizejs";
 
   import { browser } from "$app/environment";
   import Desmos from "$components/Desmos.svelte";
   import { colorToHex } from "$lib/color";
+  import { ImgWorkerRequestType } from "$lib/img.worker";
   import ImgWorker from "$lib/img.worker?worker";
 
   let calculator: any;
@@ -30,6 +39,7 @@
   let ctx: CanvasRenderingContext2D;
 
   // settings
+  let autoplay = true;
   let iterations = 100;
   const options: ImageRunnerOptions = {
     shapeTypes: [ShapeTypes.ELLIPSE, ShapeTypes.RECTANGLE, ShapeTypes.TRIANGLE],
@@ -41,7 +51,9 @@
   let settingsModal = false;
 
   let imgWorker: Worker;
-  let progress: number | null = null;
+  let playing = false;
+  let iteration = 0;
+  let hasRunner = false;
 
   function onFileUpload(e: Event) {
     if (!(e.currentTarget instanceof HTMLInputElement)) {
@@ -60,6 +72,11 @@
 
     // clear previous shapes
     calculator.setBlank();
+
+    // reset
+    iteration = 0;
+    playing = false;
+    hasRunner = false;
 
     image.onload = async () => {
       if (!canvas || !ctx) {
@@ -86,6 +103,17 @@
               latex: `\\operatorname{polygon}\\left(\\left(0,0\\right),\\left(${image.width},0\\right),\\left(${image.width},${image.height}\\right),\\left(0,${image.height}\\right)\\right)`,
               fillOpacity: "0",
             },
+            {
+              type: "expression",
+              id: "current-iteration-label",
+              latex: `\\left(${image.width},${image.height}\\right)`,
+              label: "Iteration `${i}`",
+              labelOrientation: "below_left",
+              hidden: true,
+              showLabel: true,
+              color: "#000000",
+            },
+            { type: "expression", id: "current-iteration", latex: "i=0" },
           ],
         },
       });
@@ -97,13 +125,21 @@
       const bitmapData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
       imgWorker.postMessage({
+        type: ImgWorkerRequestType.Start,
         bitmapData,
-        iterations,
-        options,
       } satisfies ImgWorkerRequestData);
+
+      if (autoplay) {
+        playing = true;
+        step();
+      }
     };
 
     image.src = URL.createObjectURL(file);
+  }
+
+  function step() {
+    imgWorker.postMessage({ type: ImgWorkerRequestType.Step, options });
   }
 
   onMount(() => {
@@ -120,6 +156,13 @@
 
     imgWorker.onmessage = (e) => {
       const msg = e.data as ImgWorkerResponseData;
+
+      hasRunner = true;
+      iteration++;
+
+      if (iteration >= iterations) {
+        playing = false;
+      }
 
       for (const shape of msg.shapes) {
         let latex: string | null = null;
@@ -161,7 +204,7 @@
 
         if (latex) {
           const expression = {
-            id: `iteration-${msg.iteration}`,
+            id: `iteration-${iteration}`,
             latex,
             color: colorToHex(shape.color),
             fillOpacity: (shape.color & 255) / 255,
@@ -170,12 +213,12 @@
 
           calculator.setExpression(expression);
         }
+
+        calculator.setExpression({ id: "current-iteration", latex: `i=${iteration}` });
       }
 
-      if (msg.iteration >= iterations - 1) {
-        progress = null;
-      } else {
-        progress = (msg.iteration / iterations) * 100;
+      if (playing) {
+        step();
       }
     };
   });
@@ -185,7 +228,36 @@
 
 <P>Imports an image into Desmos equations.</P>
 
-<Fileupload accept="image/*" on:change={onFileUpload} />
+<div class="flex gap-4">
+  <Fileupload accept="image/*" on:change={onFileUpload} />
+
+  <ButtonGroup>
+    <Button
+      on:click={() => {
+        playing = true;
+      }}
+      disabled={!hasRunner || playing}
+    >
+      <PlaySolid />
+    </Button>
+    <Button
+      on:click={() => {
+        playing = false;
+      }}
+      disabled={!hasRunner || !playing}
+    >
+      <PauseSolid />
+    </Button>
+    <Button
+      on:click={() => {
+        step();
+      }}
+      disabled={!hasRunner}
+    >
+      <ForwardStepSolid />
+    </Button>
+  </ButtonGroup>
+</div>
 
 <Button
   color="alternative"
@@ -197,11 +269,16 @@
   <CogSolid class="w-4 h-4" />
 </Button>
 
-{#if progress !== null}
-  <Progressbar {progress} labelOutside="Geometrizing image..." />
+{#if iteration}
+  <Progressbar
+    progress={Math.min((iteration / iterations) * 100, 100)}
+    labelOutside="Geometrizing image..."
+  />
 {/if}
 
 <Modal title="Settings" bind:open={settingsModal} outsideclose>
+  <Checkbox bind:checked={autoplay}>Autoplay</Checkbox>
+
   <Label for="iterations">Iterations</Label>
   <Input type="number" id="iterations" bind:value={iterations} />
 

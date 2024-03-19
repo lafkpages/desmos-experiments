@@ -1,43 +1,55 @@
-import type { ImageRunnerOptions, ShapeResult, ShapeTypes } from "geometrizejs";
+import type { ImageRunnerOptions, ShapeResult } from "geometrizejs";
 
 import { Bitmap, ImageRunner } from "geometrizejs";
 
 /// <reference lib="webworker" />
 
-export interface ImgWorkerRequestData {
-  bitmapData: ImageData;
-  iterations: number;
-  options: ImageRunnerOptions;
+export enum ImgWorkerRequestType {
+  Start,
+  Step,
 }
 
-export interface ImgWorkerResponseData {
-  iteration: number;
+export type ImgWorkerRequestData =
+  | {
+      type: ImgWorkerRequestType.Start;
+      bitmapData: ImageData;
+    }
+  | {
+      type: ImgWorkerRequestType.Step;
+      options: ImageRunnerOptions;
+    };
+
+export type ImgWorkerResponseData = {
   shapes: ({
     type: number;
   } & ShapeResult)[];
-}
+};
 
 declare function postMessage(message: ImgWorkerResponseData): void;
+
+let runner: ImageRunner;
 
 onmessage = (e) => {
   const msg = e.data as ImgWorkerRequestData;
 
-  const bitmap = Bitmap.createFromByteArray(
-    msg.bitmapData.width,
-    msg.bitmapData.height,
-    Array.from(msg.bitmapData.data),
-  );
+  switch (msg.type) {
+    case ImgWorkerRequestType.Start: {
+      runner = new ImageRunner(
+        Bitmap.createFromByteArray(
+          msg.bitmapData.width,
+          msg.bitmapData.height,
+          Array.from(msg.bitmapData.data),
+        ),
+      );
+      break;
+    }
 
-  const runner = new ImageRunner(bitmap);
-
-  for (let i = 0; i < msg.iterations; i++) {
-    console.log(`Iteration ${i + 1}`);
-    const shapes = runner.step(msg.options);
-    postMessage({
-      iteration: i,
-      shapes: shapes.map((shape) => {
-        return { type: shape.shape.getType(), ...shape };
-      }),
-    });
+    case ImgWorkerRequestType.Step: {
+      const shapes = runner.step(msg.options);
+      postMessage({
+        shapes: shapes.map((shape) => ({ type: shape.shape.getType(), ...shape })),
+      });
+      break;
+    }
   }
 };
