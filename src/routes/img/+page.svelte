@@ -34,6 +34,8 @@
   const options: ImageRunnerOptions = {
     shapeTypes: [ShapeTypes.ELLIPSE, ShapeTypes.RECTANGLE, ShapeTypes.TRIANGLE],
     alpha: 128,
+    candidateShapesPerStep: 50,
+    shapeMutationsPerStep: 100,
   };
 
   let settingsModal = false;
@@ -205,6 +207,20 @@
 
   <Label for="alpha">Alpha</Label>
   <Input type="number" id="alpha" min="1" max="255" bind:value={options.alpha} />
+
+  <Label for="candidate-shapes-per-iteration">Candidate shapes per iteration</Label>
+  <Input
+    type="number"
+    id="candidate-shapes-per-iteration"
+    bind:value={options.candidateShapesPerStep}
+  />
+
+  <Label for="shape-mutations-per-iteration">Shape mutations per iteration</Label>
+  <Input
+    type="number"
+    id="shape-mutations-per-iteration"
+    bind:value={options.shapeMutationsPerStep}
+  />
 
   <Hr />
   <Heading tag="h6">Advanced</Heading>
