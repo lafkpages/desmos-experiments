@@ -97,15 +97,29 @@
         expressions: {
           list: [
             {
+              type: "folder",
+              id: "image-border-folder",
+              title: "Image border",
+              collapsed: true,
+            },
+            {
               type: "expression",
               id: "image-border",
+              folderId: "image-border-folder",
               color: "#000000",
               latex: `\\operatorname{polygon}\\left(\\left(0,0\\right),\\left(${image.width},0\\right),\\left(${image.width},${image.height}\\right),\\left(0,${image.height}\\right)\\right)`,
               fillOpacity: "0",
             },
             {
+              type: "folder",
+              id: "current-iteration-label-folder",
+              title: "Iteration label",
+              collapsed: true,
+            },
+            {
               type: "expression",
               id: "current-iteration-label",
+              folderId: "current-iteration-label-folder",
               latex: `\\left(${image.width},${image.height}\\right)`,
               label: "Iteration `${i}`",
               labelOrientation: "below_left",
@@ -113,7 +127,12 @@
               showLabel: true,
               color: "#000000",
             },
-            { type: "expression", id: "current-iteration", latex: "i=0" },
+            {
+              type: "expression",
+              id: "current-iteration",
+              folderId: "current-iteration-label-folder",
+              latex: "i=0",
+            },
           ],
         },
       });
