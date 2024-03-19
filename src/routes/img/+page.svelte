@@ -122,8 +122,6 @@
       for (const shape of msg.shapes) {
         let latex: string | null = null;
 
-        console.log(Object.entries(ShapeTypes).find(([k, v]) => v === shape.type)?.[0], shape);
-
         switch (shape.type) {
           case ShapeTypes.ELLIPSE: {
             let { x, y, rx, ry } = shape.shape;
@@ -169,7 +167,6 @@
           };
 
           calculator.setExpression(expression);
-          // console.log(Object.entries(ShapeTypes).find(([k, v]) => v === shape.type)?.[0],shape, expression);
         }
       }
 

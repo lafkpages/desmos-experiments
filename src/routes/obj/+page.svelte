@@ -94,8 +94,6 @@
 
     const equations = generateEquations(objData, objModelIndex, {});
 
-    console.debug(objModelIndex, objData.models[objModelIndex], equations);
-
     // remove face expressions
     calculator.removeExpressions(
       calculator.getExpressions().filter((e) => e.id.startsWith("face")),
