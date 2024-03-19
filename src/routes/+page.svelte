@@ -173,7 +173,7 @@
 
 <Desmos initialState={objInitialState} bind:calculator />
 
-<Modal title="Settings" bind:open={settingsModal}>
+<Modal title="Settings" bind:open={settingsModal} outsideclose>
   <Checkbox bind:checked={groupFaces}>Group faces</Checkbox>
 
   <Hr />
@@ -213,6 +213,6 @@
   </Dropdown>
 </Modal>
 
-<Modal title="Error" bind:open={errorModal}>
+<Modal title="Error" bind:open={errorModal} outsideclose>
   <p>{errorModalMessage}</p>
 </Modal>
