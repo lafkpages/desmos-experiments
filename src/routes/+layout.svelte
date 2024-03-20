@@ -14,8 +14,12 @@
         Desmos experiments
       </span>
     </NavBrand>
-    <NavHamburger />
-    <NavUl>
+    <div class="flex md:order-2">
+      <div class="w-8 h-8" />
+
+      <NavHamburger />
+    </div>
+    <NavUl class="order-1">
       {#each pages as page}
         <NavLi href={page.href}>{page.title}</NavLi>
       {/each}

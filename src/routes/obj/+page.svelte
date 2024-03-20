@@ -165,7 +165,7 @@
 
 <Button
   color="alternative"
-  class="absolute top-4 right-4 !p-2"
+  class="absolute top-9 right-8 !p-2"
   on:click={() => {
     settingsModal = true;
   }}
