@@ -178,7 +178,7 @@
     imgWorker = new ImgWorker();
 
     imgWorker.onmessage = (e) => {
-      if (!$iterations) {
+      if (!image || !$iterations) {
         return;
       }
 
