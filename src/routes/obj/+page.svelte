@@ -15,12 +15,13 @@
     P,
     Spinner,
   } from "flowbite-svelte";
-  import { ChevronDownSolid, CogSolid } from "flowbite-svelte-icons";
+  import { ChevronDownSolid } from "flowbite-svelte-icons";
   import ObjFileParser from "obj-file-parser";
   import { queryParam, ssp } from "sveltekit-search-params";
 
   import defaultObj from "$assets/default.obj?raw";
   import Desmos from "$components/Desmos.svelte";
+  import SettingsButton from "$components/SettingsButton.svelte";
   import { generateEquations } from "$lib";
   import { objInitialState } from "$lib/calculator";
 
@@ -163,15 +164,7 @@
 
 <Fileupload accept=".obj" on:change={onFileUpload} />
 
-<Button
-  color="alternative"
-  class="absolute top-9 right-8 !p-2"
-  on:click={() => {
-    settingsModal = true;
-  }}
->
-  <CogSolid class="w-4 h-4" />
-</Button>
+<SettingsButton bind:settingsModal />
 
 <Desmos initialState={objInitialState} bind:calculator />
 

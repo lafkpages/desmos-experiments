@@ -16,12 +16,13 @@
     P,
     Progressbar,
   } from "flowbite-svelte";
-  import { CogSolid, ForwardStepSolid, PauseSolid, PlaySolid } from "flowbite-svelte-icons";
+  import { ForwardStepSolid, PauseSolid, PlaySolid } from "flowbite-svelte-icons";
   import { ShapeTypes } from "geometrizejs";
   import { queryParam, ssp } from "sveltekit-search-params";
 
   import { browser } from "$app/environment";
   import Desmos from "$components/Desmos.svelte";
+  import SettingsButton from "$components/SettingsButton.svelte";
   import { colorToHex } from "$lib/color";
   import { ImgWorkerRequestType } from "$lib/img.worker";
   import ImgWorker from "$lib/img.worker?worker";
@@ -310,15 +311,7 @@
   </ButtonGroup>
 </div>
 
-<Button
-  color="alternative"
-  class="absolute top-9 right-8 !p-2"
-  on:click={() => {
-    settingsModal = true;
-  }}
->
-  <CogSolid class="w-4 h-4" />
-</Button>
+<SettingsButton bind:settingsModal />
 
 {#if iteration && $iterations}
   <Progressbar
