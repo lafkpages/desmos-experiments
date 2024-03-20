@@ -81,19 +81,19 @@ export const objInitialState = {
         type: "expression",
         id: "x0",
         folderId: "input3DPoints",
-        latex: "x_{0}=\\left[1,1,1,1,-1,-1,-1,-1\\right]",
+        latex: "x_{0}=\\left[\\right]",
       },
       {
         type: "expression",
         id: "y0",
         folderId: "input3DPoints",
-        latex: "y_{0}=\\left[1,-1,1,-1,1,-1,1,-1\\right]",
+        latex: "y_{0}=\\left[\\right]",
       },
       {
         type: "expression",
         id: "z0",
         folderId: "input3DPoints",
-        latex: "z_{0}=\\left[-1,-1,1,1,-1,-1,1,1\\right]",
+        latex: "z_{0}=\\left[\\right]",
       },
       {
         type: "folder",
@@ -177,22 +177,19 @@ export const objInitialState = {
         type: "expression",
         id: "y1",
         folderId: "rotatedPoints",
-        latex:
-          "y_{1}=\\left[R_{xy}\\left(y_{0}\\left[1\\right],z_{0}\\left[1\\right],X_{rot}\\right),R_{xy}\\left(y_{0}\\left[2\\right],z_{0}\\left[2\\right],X_{rot}\\right),R_{xy}\\left(y_{0}\\left[3\\right],z_{0}\\left[3\\right],X_{rot}\\right),R_{xy}\\left(y_{0}\\left[4\\right],z_{0}\\left[4\\right],X_{rot}\\right),R_{xy}\\left(y_{0}\\left[5\\right],z_{0}\\left[5\\right],X_{rot}\\right),R_{xy}\\left(y_{0}\\left[6\\right],z_{0}\\left[6\\right],X_{rot}\\right),R_{xy}\\left(y_{0}\\left[7\\right],z_{0}\\left[7\\right],X_{rot}\\right),R_{xy}\\left(y_{0}\\left[8\\right],z_{0}\\left[8\\right],X_{rot}\\right)\\right]",
+        latex: "y_{1}=\\left[\\right]",
       },
       {
         type: "expression",
         id: "z1",
         folderId: "rotatedPoints",
-        latex:
-          "z_{1}=\\left[R_{xz}\\left(y_{0}\\left[1\\right],z_{0}\\left[1\\right],X_{rot}\\right),R_{xz}\\left(y_{0}\\left[2\\right],z_{0}\\left[2\\right],X_{rot}\\right),R_{xz}\\left(y_{0}\\left[3\\right],z_{0}\\left[3\\right],X_{rot}\\right),R_{xz}\\left(y_{0}\\left[4\\right],z_{0}\\left[4\\right],X_{rot}\\right),R_{xz}\\left(y_{0}\\left[5\\right],z_{0}\\left[5\\right],X_{rot}\\right),R_{xz}\\left(y_{0}\\left[6\\right],z_{0}\\left[6\\right],X_{rot}\\right),R_{xz}\\left(y_{0}\\left[7\\right],z_{0}\\left[7\\right],X_{rot}\\right),R_{xz}\\left(y_{0}\\left[8\\right],z_{0}\\left[8\\right],X_{rot}\\right)\\right]",
+        latex: "z_{1}=\\left[\\right]",
       },
       {
         type: "expression",
         id: "x2",
         folderId: "rotatedPoints",
-        latex:
-          "x_{2}=\\left[R_{yx}\\left(x_{1}\\left[1\\right],z_{1}\\left[1\\right],Y_{rot}\\right),R_{yx}\\left(x_{1}\\left[2\\right],z_{1}\\left[2\\right],Y_{rot}\\right),R_{yx}\\left(x_{1}\\left[3\\right],z_{1}\\left[3\\right],Y_{rot}\\right),R_{yx}\\left(x_{1}\\left[4\\right],z_{1}\\left[4\\right],Y_{rot}\\right),R_{yx}\\left(x_{1}\\left[5\\right],z_{1}\\left[5\\right],Y_{rot}\\right),R_{yx}\\left(x_{1}\\left[6\\right],z_{1}\\left[6\\right],Y_{rot}\\right),R_{yx}\\left(x_{1}\\left[7\\right],z_{1}\\left[7\\right],Y_{rot}\\right),R_{yx}\\left(x_{1}\\left[8\\right],z_{1}\\left[8\\right],Y_{rot}\\right)\\right]",
+        latex: "x_{2}=\\left[\\right]",
       },
       {
         type: "expression",
@@ -204,22 +201,19 @@ export const objInitialState = {
         type: "expression",
         id: "z2",
         folderId: "rotatedPoints",
-        latex:
-          "z_{2}=\\left[R_{yz}\\left(x_{1}\\left[1\\right],z_{1}\\left[1\\right],Y_{rot}\\right),R_{yz}\\left(x_{1}\\left[2\\right],z_{1}\\left[2\\right],Y_{rot}\\right),R_{yz}\\left(x_{1}\\left[3\\right],z_{1}\\left[3\\right],Y_{rot}\\right),R_{yz}\\left(x_{1}\\left[4\\right],z_{1}\\left[4\\right],Y_{rot}\\right),R_{yz}\\left(x_{1}\\left[5\\right],z_{1}\\left[5\\right],Y_{rot}\\right),R_{yz}\\left(x_{1}\\left[6\\right],z_{1}\\left[6\\right],Y_{rot}\\right),R_{yz}\\left(x_{1}\\left[7\\right],z_{1}\\left[7\\right],Y_{rot}\\right),R_{yz}\\left(x_{1}\\left[8\\right],z_{1}\\left[8\\right],Y_{rot}\\right)\\right]",
+        latex: "z_{2}=\\left[\\right]",
       },
       {
         type: "expression",
         id: "x3",
         folderId: "rotatedPoints",
-        latex:
-          "x_{3}=\\left[R_{zx}\\left(x_{2}\\left[1\\right],y_{2}\\left[1\\right],Z_{rot}\\right),R_{zx}\\left(x_{2}\\left[2\\right],y_{2}\\left[2\\right],Z_{rot}\\right),R_{zx}\\left(x_{2}\\left[3\\right],y_{2}\\left[3\\right],Z_{rot}\\right),R_{zx}\\left(x_{2}\\left[4\\right],y_{2}\\left[4\\right],Z_{rot}\\right),R_{zx}\\left(x_{2}\\left[5\\right],y_{2}\\left[5\\right],Z_{rot}\\right),R_{zx}\\left(x_{2}\\left[6\\right],y_{2}\\left[6\\right],Z_{rot}\\right),R_{zx}\\left(x_{2}\\left[7\\right],y_{2}\\left[7\\right],Z_{rot}\\right),R_{zx}\\left(x_{2}\\left[8\\right],y_{2}\\left[8\\right],Z_{rot}\\right)\\right]",
+        latex: "x_{3}=\\left[\\right]",
       },
       {
         type: "expression",
         id: "y3",
         folderId: "rotatedPoints",
-        latex:
-          "y_{3}=\\left[R_{zy}\\left(x_{2}\\left[1\\right],y_{2}\\left[1\\right],Z_{rot}\\right),R_{zy}\\left(x_{2}\\left[2\\right],y_{2}\\left[2\\right],Z_{rot}\\right),R_{zy}\\left(x_{2}\\left[3\\right],y_{2}\\left[3\\right],Z_{rot}\\right),R_{zy}\\left(x_{2}\\left[4\\right],y_{2}\\left[4\\right],Z_{rot}\\right),R_{zy}\\left(x_{2}\\left[5\\right],y_{2}\\left[5\\right],Z_{rot}\\right),R_{zy}\\left(x_{2}\\left[6\\right],y_{2}\\left[6\\right],Z_{rot}\\right),R_{zy}\\left(x_{2}\\left[7\\right],y_{2}\\left[7\\right],Z_{rot}\\right),R_{zy}\\left(x_{2}\\left[8\\right],y_{2}\\left[8\\right],Z_{rot}\\right)\\right]",
+        latex: "y_{3}=\\left[\\right]",
       },
       {
         type: "expression",
@@ -277,8 +271,7 @@ export const objInitialState = {
         type: "expression",
         id: "faces",
         folderId: "projectedFaces",
-        latex:
-          "\\left[\\operatorname{polygon}\\left(p\\left[1\\right],p\\left[5\\right],p\\left[7\\right],p\\left[3\\right]\\right),\\operatorname{polygon}\\left(p\\left[4\\right],p\\left[3\\right],p\\left[7\\right],p\\left[8\\right]\\right),\\operatorname{polygon}\\left(p\\left[8\\right],p\\left[7\\right],p\\left[5\\right],p\\left[6\\right]\\right),\\operatorname{polygon}\\left(p\\left[6\\right],p\\left[2\\right],p\\left[4\\right],p\\left[8\\right]\\right),\\operatorname{polygon}\\left(p\\left[2\\right],p\\left[1\\right],p\\left[3\\right],p\\left[4\\right]\\right),\\operatorname{polygon}\\left(p\\left[6\\right],p\\left[5\\right],p\\left[1\\right],p\\left[2\\right]\\right)\\right]",
+        latex: "\\left[\\right]",
         fillOpacity: "F_{opacity}",
       },
     ],
