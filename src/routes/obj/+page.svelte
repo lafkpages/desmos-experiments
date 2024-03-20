@@ -119,6 +119,7 @@
       calculator.setExpression({
         id: "faces",
         latex: `\\left[${equations.faces.join(",")}\\right]`,
+        fillOpacity: "F_{opacity}",
       });
     } else {
       // add face expressions
@@ -126,6 +127,7 @@
         equations.faces.map((f, i) => ({
           id: `face${i}`,
           latex: f,
+          fillOpacity: "F_{opacity}",
           folderId: "projectedFaces",
         })),
       );

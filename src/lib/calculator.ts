@@ -59,6 +59,19 @@ export const objInitialState = {
         },
       },
       {
+        type: "expression",
+        id: "fOpacity",
+        folderId: "inputSettings",
+        latex: "F_{opacity}=0.4",
+        hidden: true,
+        slider: {
+          hardMin: true,
+          hardMax: true,
+          min: "0",
+          max: "1",
+        },
+      },
+      {
         type: "folder",
         id: "input3DPoints",
         title: "Input 3D points",
@@ -266,6 +279,7 @@ export const objInitialState = {
         folderId: "projectedFaces",
         latex:
           "\\left[\\operatorname{polygon}\\left(p\\left[1\\right],p\\left[5\\right],p\\left[7\\right],p\\left[3\\right]\\right),\\operatorname{polygon}\\left(p\\left[4\\right],p\\left[3\\right],p\\left[7\\right],p\\left[8\\right]\\right),\\operatorname{polygon}\\left(p\\left[8\\right],p\\left[7\\right],p\\left[5\\right],p\\left[6\\right]\\right),\\operatorname{polygon}\\left(p\\left[6\\right],p\\left[2\\right],p\\left[4\\right],p\\left[8\\right]\\right),\\operatorname{polygon}\\left(p\\left[2\\right],p\\left[1\\right],p\\left[3\\right],p\\left[4\\right]\\right),\\operatorname{polygon}\\left(p\\left[6\\right],p\\left[5\\right],p\\left[1\\right],p\\left[2\\right]\\right)\\right]",
+        fillOpacity: "F_{opacity}",
       },
     ],
   },
