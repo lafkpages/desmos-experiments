@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { ImgWorkerRequestData, ImgWorkerResponseData } from "$lib/img.worker";
-  import type { ImageRunnerOptions } from "geometrizejs";
 
   import { onMount } from "svelte";
 
@@ -17,14 +16,9 @@
     P,
     Progressbar,
   } from "flowbite-svelte";
-  import {
-    CloseSolid,
-    CogSolid,
-    ForwardStepSolid,
-    PauseSolid,
-    PlaySolid,
-  } from "flowbite-svelte-icons";
+  import { CogSolid, ForwardStepSolid, PauseSolid, PlaySolid } from "flowbite-svelte-icons";
   import { ShapeTypes } from "geometrizejs";
+  import { queryParam, ssp } from "sveltekit-search-params";
 
   import { browser } from "$app/environment";
   import Desmos from "$components/Desmos.svelte";
@@ -39,14 +33,12 @@
   let ctx: CanvasRenderingContext2D;
 
   // settings
-  let autoplay = true;
-  let iterations = 100;
-  const options: ImageRunnerOptions = {
-    shapeTypes: [ShapeTypes.ELLIPSE, ShapeTypes.RECTANGLE, ShapeTypes.TRIANGLE],
-    alpha: 128,
-    candidateShapesPerStep: 50,
-    shapeMutationsPerStep: 100,
-  };
+  const autoplay = queryParam("autoplay", ssp.boolean(true));
+  const iterations = queryParam("iterations", ssp.number(100));
+  const shapeTypes = [ShapeTypes.ELLIPSE, ShapeTypes.RECTANGLE, ShapeTypes.TRIANGLE];
+  const alpha = queryParam("alpha", ssp.number(128));
+  const candidateShapesPerStep = queryParam("candidateShapesPerStep", ssp.number(50));
+  const shapeMutationsPerStep = queryParam("shapeMutationsPerStep", ssp.number(100));
 
   let settingsModal = false;
 
@@ -148,7 +140,7 @@
         bitmapData,
       } satisfies ImgWorkerRequestData);
 
-      if (autoplay) {
+      if ($autoplay) {
         playing = true;
         step();
       }
@@ -158,7 +150,19 @@
   }
 
   function step() {
-    imgWorker.postMessage({ type: ImgWorkerRequestType.Step, options });
+    if ($alpha === null || $candidateShapesPerStep === null || $shapeMutationsPerStep === null) {
+      return;
+    }
+
+    imgWorker.postMessage({
+      type: ImgWorkerRequestType.Step,
+      options: {
+        shapeTypes,
+        alpha: $alpha,
+        candidateShapesPerStep: $candidateShapesPerStep,
+        shapeMutationsPerStep: $shapeMutationsPerStep,
+      },
+    } satisfies ImgWorkerRequestData);
   }
 
   onMount(() => {
@@ -174,12 +178,16 @@
     imgWorker = new ImgWorker();
 
     imgWorker.onmessage = (e) => {
+      if (!$iterations) {
+        return;
+      }
+
       const msg = e.data as ImgWorkerResponseData;
 
       hasRunner = true;
       iteration++;
 
-      if (iteration >= iterations) {
+      if (iteration >= $iterations) {
         playing = false;
       }
 
@@ -292,35 +300,29 @@
   <CogSolid class="w-4 h-4" />
 </Button>
 
-{#if iteration}
+{#if iteration && $iterations}
   <Progressbar
-    progress={Math.min((iteration / iterations) * 100, 100)}
+    progress={Math.min((iteration / $iterations) * 100, 100)}
     labelOutside="Geometrizing image..."
   />
 {/if}
 
 <Modal title="Settings" bind:open={settingsModal} outsideclose>
-  <Checkbox bind:checked={autoplay}>Autoplay</Checkbox>
+  {#if $autoplay !== null}
+    <Checkbox bind:checked={$autoplay}>Autoplay</Checkbox>
+  {/if}
 
   <Label for="iterations">Iterations</Label>
-  <Input type="number" id="iterations" bind:value={iterations} />
+  <Input type="number" id="iterations" bind:value={$iterations} />
 
   <Label for="alpha">Alpha</Label>
-  <Input type="number" id="alpha" min="1" max="255" bind:value={options.alpha} />
+  <Input type="number" id="alpha" min="1" max="255" bind:value={$alpha} />
 
   <Label for="candidate-shapes-per-iteration">Candidate shapes per iteration</Label>
-  <Input
-    type="number"
-    id="candidate-shapes-per-iteration"
-    bind:value={options.candidateShapesPerStep}
-  />
+  <Input type="number" id="candidate-shapes-per-iteration" bind:value={$candidateShapesPerStep} />
 
   <Label for="shape-mutations-per-iteration">Shape mutations per iteration</Label>
-  <Input
-    type="number"
-    id="shape-mutations-per-iteration"
-    bind:value={options.shapeMutationsPerStep}
-  />
+  <Input type="number" id="shape-mutations-per-iteration" bind:value={$shapeMutationsPerStep} />
 
   <Hr />
   <Heading tag="h6">Advanced</Heading>
