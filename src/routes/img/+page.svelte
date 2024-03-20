@@ -244,10 +244,12 @@
 </script>
 
 <svelte:head>
-  <title>Image importer</title>
-</svelte:head><Heading tag="h1">Image to Desmos</Heading>
+  <title>Image geometrizer</title>
+</svelte:head>
 
-<P>Imports an image into Desmos equations.</P>
+<Heading tag="h1">Image geometrizer</Heading>
+
+<P>Converts an image into different shapes and graphs them in Desmos.</P>
 
 <div class="flex gap-4">
   <Fileupload accept="image/*" on:change={onFileUpload} />

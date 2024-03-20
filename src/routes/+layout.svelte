@@ -8,14 +8,14 @@
   <Navbar fluid>
     <NavBrand href="/">
       <img src="/favicon.png" alt="Cube in Desmos" class="me-3 h-6 sm:h-9" />
-      <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
-        >Desmos experiments</span
-      >
+      <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+        Desmos experiments
+      </span>
     </NavBrand>
     <NavHamburger />
     <NavUl>
-      <NavLi href="/obj">OBJ to Desmos</NavLi>
-      <NavLi href="/img">Image to Desmos</NavLi>
+      <NavLi href="/obj">OBJ renderer</NavLi>
+      <NavLi href="/img">Image geometrizer</NavLi>
     </NavUl>
   </Navbar>
 

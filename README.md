@@ -1,6 +1,6 @@
 # obj-to-desmos
 
-Converts an OBJ file into Desmos equations.
+Some programs I've made to import cool stuff into Desmos.
 
 To install dependencies:
 

@@ -1,6 +1,5 @@
 {
-  "name": "obj-to-desmos",
-  "description": "Converts an OBJ file into Desmos equations.",
+  "name": "@luisafk/desmos-experiments",
   "version": "0.0.1",
   "module": "src/cli/index.ts",
   "scripts": {
