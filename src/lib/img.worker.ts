@@ -1,8 +1,8 @@
+/// <reference lib="webworker" />
+
 import type { ImageRunnerOptions, ShapeResult } from "geometrizejs";
 
 import { Bitmap, ImageRunner } from "geometrizejs";
-
-/// <reference lib="webworker" />
 
 export enum ImgWorkerRequestType {
   Start,
