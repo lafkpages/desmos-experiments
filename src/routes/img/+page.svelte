@@ -34,10 +34,10 @@
 
   // settings
   const autoplay = queryParam("autoplay", ssp.boolean(true));
-  const iterations = queryParam("iterations", ssp.number(100));
+  const iterations = queryParam("iterations", ssp.number(1500));
   const shapeTypes = [ShapeTypes.ELLIPSE, ShapeTypes.RECTANGLE, ShapeTypes.TRIANGLE];
   const alpha = queryParam("alpha", ssp.number(128));
-  const candidateShapesPerStep = queryParam("candidateShapesPerStep", ssp.number(50));
+  const candidateShapesPerStep = queryParam("candidateShapesPerStep", ssp.number(100));
   const shapeMutationsPerStep = queryParam("shapeMutationsPerStep", ssp.number(100));
 
   let settingsModal = false;
