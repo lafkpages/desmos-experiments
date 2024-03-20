@@ -243,7 +243,9 @@
   });
 </script>
 
-<Heading tag="h1">Image to Desmos</Heading>
+<svelte:head>
+  <title>Image importer</title>
+</svelte:head><Heading tag="h1">Image to Desmos</Heading>
 
 <P>Imports an image into Desmos equations.</P>
 

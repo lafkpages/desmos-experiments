@@ -153,7 +153,9 @@
   }
 </script>
 
-<Heading tag="h1">OBJ to Desmos</Heading>
+<svelte:head>
+  <title>OBJ renderer</title>
+</svelte:head><Heading tag="h1">OBJ to Desmos</Heading>
 
 <P>Converts an OBJ file into Desmos equations.</P>
 
