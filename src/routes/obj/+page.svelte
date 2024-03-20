@@ -9,7 +9,7 @@
 <script lang="ts">
   import "$types/desmos.d.ts";
 
-  import { tick } from "svelte";
+  import { onMount, tick } from "svelte";
 
   import {
     Button,
@@ -25,6 +25,7 @@
   } from "flowbite-svelte";
   import { ChevronDownSolid, CogSolid } from "flowbite-svelte-icons";
   import ObjFileParser from "obj-file-parser";
+  import { queryParam, ssp } from "sveltekit-search-params";
 
   import defaultObj from "$assets/default.obj?raw";
   import Desmos from "$components/Desmos.svelte";
@@ -38,7 +39,7 @@
   let objModelIndex = 0;
 
   // settings
-  let groupFaces = true;
+  let groupFaces = queryParam("groupFaces", ssp.boolean(true));
 
   let settingsModal = false;
   let loadingModal = false;
@@ -115,7 +116,7 @@
       { id: "z3", latex: equations.rotatedVertices[8] },
     ]);
 
-    if (groupFaces) {
+    if ($groupFaces) {
       calculator.setExpression({
         id: "faces",
         latex: `\\left[${equations.faces.join(",")}\\right]`,
@@ -149,10 +150,15 @@
   $: {
     // reactivity
     objModelIndex;
-    groupFaces;
+    $groupFaces;
 
     loadModel();
   }
+
+  // apply settings from query params
+  onMount(() => {
+    loadModel();
+  });
 </script>
 
 <svelte:head>
@@ -178,7 +184,9 @@
 <Desmos initialState={objInitialState} bind:calculator />
 
 <Modal title="Settings" bind:open={settingsModal} outsideclose>
-  <Checkbox bind:checked={groupFaces}>Group faces</Checkbox>
+  {#if $groupFaces !== null}
+    <Checkbox bind:checked={$groupFaces}>Group faces</Checkbox>
+  {/if}
 
   <Hr />
   <Heading tag="h6">Advanced</Heading>
