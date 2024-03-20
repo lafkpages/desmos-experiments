@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ImgWorkerRequestData, ImgWorkerResponseData } from "$lib/img.worker";
 
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
   import {
     Button,
@@ -264,6 +264,10 @@
 
     // random image on load
     geometrizeImage("https://i.imgur.com/v8IjGkx.jpeg");
+  });
+
+  onDestroy(() => {
+    imgWorker?.terminate();
   });
 </script>
 
