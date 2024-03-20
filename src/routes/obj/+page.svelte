@@ -89,7 +89,7 @@
 
     // remove face expressions
     calculator.removeExpressions(
-      calculator.getExpressions().filter((e) => e.id.startsWith("face")),
+      calculator.getExpressions().filter((e: any) => e.id.startsWith("face")),
     );
 
     // replace vertex and rotated vertex expressions
