@@ -1,3 +1,11 @@
+<script lang="ts" context="module">
+  declare global {
+    interface Window {
+      __debug_calculator?: unknown;
+    }
+  }
+</script>
+
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
 
