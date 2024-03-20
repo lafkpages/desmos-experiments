@@ -1,5 +1,5 @@
 <script>
-  import { Navbar, NavBrand, NavHamburger, NavLi, NavUl } from "flowbite-svelte";
+  import { DarkMode, Navbar, NavBrand, NavHamburger, NavLi, NavUl } from "flowbite-svelte";
 
   import "../app.pcss";
 
@@ -14,8 +14,9 @@
         Desmos experiments
       </span>
     </NavBrand>
-    <div class="flex md:order-2">
-      <div class="w-8 h-8" />
+    <div class="flex gap-2 md:order-2">
+      <DarkMode />
+      <div class="w-9 h-9" />
 
       <NavHamburger />
     </div>
