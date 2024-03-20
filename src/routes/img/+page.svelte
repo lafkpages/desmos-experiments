@@ -62,6 +62,14 @@
       URL.revokeObjectURL(image.src);
     }
 
+    geometrizeImage(URL.createObjectURL(file));
+  }
+
+  function geometrizeImage(src: string) {
+    if (!image) {
+      return;
+    }
+
     // clear previous shapes
     calculator.setBlank();
 
@@ -146,7 +154,7 @@
       }
     };
 
-    image.src = URL.createObjectURL(file);
+    image.src = src;
   }
 
   function step() {
@@ -174,6 +182,11 @@
     } else {
       throw new Error("Could not get 2d context");
     }
+
+    if (!image) {
+      return;
+    }
+    image.crossOrigin = "anonymous";
 
     imgWorker = new ImgWorker();
 
@@ -248,6 +261,9 @@
         step();
       }
     };
+
+    // random image on load
+    geometrizeImage("https://i.imgur.com/v8IjGkx.jpeg");
   });
 </script>
 
