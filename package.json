@@ -37,6 +37,7 @@
     "@vercel/speed-insights": "^1.0.10",
     "enquirer": "^2.4.1",
     "geometrizejs": "^0.0.19",
+    "mathlive": "^0.98.6",
     "obj-file-parser": "^0.6.2"
   }
 }

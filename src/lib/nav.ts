@@ -9,4 +9,9 @@ export const pages = [
     description: "Converts an OBJ file into Desmos equations.",
     href: "/obj",
   },
+  // {
+  //   title: "LaTeX simplifier",
+  //   description: "Simplifies LaTeX expressions.",
+  //   href: "/simplifier",
+  // },
 ];
