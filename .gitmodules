@@ -1,0 +1,3 @@
+[submodule "src/lib/crazy-desmos-expressions"]
+	path = src/lib/crazy-desmos-expressions
+	url = https://github.com/lafkpages/crazy-desmos-expressions.git
