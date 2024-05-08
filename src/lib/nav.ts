@@ -14,4 +14,10 @@ export const pages = [
   //   description: "Simplifies LaTeX expressions.",
   //   href: "/simplifier",
   // },
+  {
+    title: "Number complexifier",
+    description:
+      "Creates long math expressions that can be evaluated in Desmos to any given number.",
+    href: "/complexifier",
+  },
 ];

@@ -8,7 +8,7 @@
   <title>Desmos experiments</title>
 </svelte:head>
 
-<main class="flex flex-col items-center justify-center gap-4 size-full">
+<main class="flex flex-col items-center justify-center gap-4 size-full h-max">
   <Heading tag="h1" class="w-max">Desmos experiments</Heading>
 
   <P>Some programs I've made to import cool stuff into Desmos.</P>
