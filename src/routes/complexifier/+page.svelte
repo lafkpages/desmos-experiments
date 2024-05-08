@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
 
-  import { Button, Label, NumberInput } from "flowbite-svelte";
+  import { Button, ButtonGroup, Label, NumberInput } from "flowbite-svelte";
   import { MathfieldElement } from "mathlive";
 
   import Desmos from "$components/Desmos.svelte";
@@ -10,29 +10,38 @@
   import { latexToDesmosLatex } from "$lib/crazy-desmos-expressions/src/utils";
 
   let n = 0;
-  let iters = 100;
+  let iters = 15;
 
-  let latex = "";
-
-  let mathContainer: HTMLDivElement;
+  let latex = n.toString();
   let mathfield: MathfieldElement;
-
   let calculator: any;
+
+  let desmosTab = true;
 
   let ce: ComputeEngine;
   onMount(() => {
     ce = new ComputeEngine();
 
-    mathfield = new MathfieldElement();
-    mathfield.readonly = true;
-
-    mathContainer.appendChild(mathfield);
-
-    calculator.updateSettings({
-      graphpaper: false,
-      zoomButtons: false,
-    });
+    render();
   });
+
+  function render() {
+    if (mathfield) {
+      mathfield.value = latex;
+    }
+
+    if (calculator) {
+      calculator.updateSettings({
+        graphpaper: false,
+        zoomButtons: false,
+      });
+
+      calculator.setExpression({
+        id: "expr",
+        latex,
+      });
+    }
+  }
 </script>
 
 <div class="flex gap-6 mb-6">
@@ -47,22 +56,45 @@
   </div>
 </div>
 
-<Button
-  class="mb-2"
-  on:click={() => {
-    const expr = generate(n, iters);
-    const box = ce.box(expr, { canonical: false });
-    latex = latexToDesmosLatex(box.latex);
+<div class="flex justify-between mb-2">
+  <Button
+    on:click={async () => {
+      const expr = generate(n, iters);
+      const box = ce.box(expr, { canonical: false });
+      latex = latexToDesmosLatex(box.latex);
 
-    mathfield.value = latex;
-    calculator.setExpression({
-      id: "expr",
-      latex,
-    });
-  }}
->
-  Generate
-</Button>
+      await tick();
 
-<Desmos bind:calculator />
-<div class="w-full overflow-auto" bind:this={mathContainer} />
+      render();
+    }}
+  >
+    Generate
+  </Button>
+
+  <ButtonGroup>
+    <Button
+      on:click={async () => {
+        desmosTab = true;
+        await tick();
+        render();
+      }}
+    >
+      Desmos
+    </Button>
+    <Button
+      on:click={async () => {
+        desmosTab = false;
+        await tick();
+        render();
+      }}
+    >
+      LaTeX
+    </Button>
+  </ButtonGroup>
+</div>
+
+{#if desmosTab}
+  <Desmos bind:calculator />
+{:else}
+  <math-field readonly bind:this={mathfield} />
+{/if}
