@@ -25,6 +25,9 @@
 
   let themeObserver: MutationObserver;
 
+  let classProp = "";
+  export { classProp as class };
+
   function updateTheme() {
     calculator.updateSettings({
       invertedColors: document.documentElement.classList.contains("dark"),
@@ -63,4 +66,4 @@
 
 <svelte:window on:load={onLoadMount} />
 
-<div class="flex-grow" bind:this={calculatorElm} />
+<div class="flex-grow {classProp}" bind:this={calculatorElm} />
