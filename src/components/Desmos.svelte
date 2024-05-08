@@ -16,7 +16,7 @@
     };
   }>();
 
-  export let initialState: any;
+  export let initialState: any = null;
 
   export let calculator: any;
   let calculatorElm: HTMLDivElement;
@@ -43,7 +43,9 @@
     updateTheme();
 
     didSetup = true;
-    calculator.setState(initialState);
+    if (initialState) {
+      calculator.setState(initialState);
+    }
 
     dispatch("init", { state: initialState, element: calculatorElm });
 
