@@ -80,7 +80,7 @@
     hasRunner = false;
 
     image.onload = async () => {
-      if (!canvas || !ctx) {
+      if (!canvas || !ctx || $iterations === null) {
         return;
       }
 
@@ -133,6 +133,16 @@
               id: "current-iteration",
               folderId: "current-iteration-label-folder",
               latex: "i=0",
+              slider: {
+                hardMin: true,
+                hardMax: true,
+                min: "0",
+                max: $iterations.toString(),
+                step: "1",
+                isPlaying: false,
+                loopMode: "PLAY_ONCE",
+                animationPeriod: $iterations / 0.13125,
+              },
             },
           ],
         },
@@ -215,7 +225,7 @@
             // flip across Y axis
             y = image.height - y;
 
-            latex = `\\left(\\frac{1}{${rx}}^{2}\\right)\\left(x-\\left(${x}\\right)\\right)^{2}+\\left(\\frac{1}{${ry}}^{2}\\right)\\left(y-\\left(${y}\\right)\\right)^{2}<1`;
+            latex = `\\left(\\frac{1}{${rx}}^{2}\\right)\\left(x-\\left(${x}\\right)\\right)^{2}+\\left(\\frac{1}{${ry}}^{2}\\right)\\left(y-\\left(${y}\\right)\\right)^{2}<1\\left\\{i\\ge${iteration}\\right\\}`;
             break;
           }
 
@@ -226,7 +236,7 @@
             y1 = image.height - y1;
             y2 = image.height - y2;
 
-            latex = `\\operatorname{polygon}\\left(\\left(${x1},${y1}\\right),\\left(${x2},${y1}\\right),\\left(${x2},${y2}\\right),\\left(${x1},${y2}\\right)\\right)`;
+            latex = `\\operatorname{polygon}\\left(\\left(${x1},${y1}\\right),\\left(${x2},${y1}\\right),\\left(${x2},${y2}\\right),\\left(${x1},${y2}\\right)\\right)\\left\\{i\\ge${iteration}\\right\\}`;
             break;
           }
 
@@ -238,7 +248,7 @@
             y2 = image.height - y2;
             y3 = image.height - y3;
 
-            latex = `\\operatorname{polygon}\\left(\\left(${x1},${y1}\\right),\\left(${x2},${y2}\\right),\\left(${x3},${y3}\\right)\\right)`;
+            latex = `\\operatorname{polygon}\\left(\\left(${x1},${y1}\\right),\\left(${x2},${y2}\\right),\\left(${x3},${y3}\\right)\\right)\\left\\{i\\ge${iteration}\\right\\}`;
             break;
           }
         }
