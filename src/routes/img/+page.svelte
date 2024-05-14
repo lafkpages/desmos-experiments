@@ -315,7 +315,7 @@
 
 {#if iteration && $iterations}
   <Progressbar
-    progress={Math.min((iteration / $iterations) * 100, 100)}
+    progress={Math.min((iteration / $iterations) * 100, 100).toFixed(2)}
     labelOutside="Geometrizing image..."
   />
 {/if}
