@@ -5,3 +5,7 @@ export function colorToHex(color: number) {
 
   return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).padStart(6, "0");
 }
+
+export function desmosColorLaTeX(rgb: readonly [number, number, number]) {
+  return `\\operatorname{rgb}\\left(${rgb}\\right)`;
+}

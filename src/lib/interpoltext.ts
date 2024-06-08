@@ -1,8 +1,9 @@
+import { desmosColorLaTeX } from "./color";
+
 function verticalLine(x: number, y: number, height: number) {
   const heightStr = height.toString();
 
   return {
-    type: "expression",
     latex: `\\left(${x}a+At+A${x}-\\frac{A${height}}{2},ta+${y}a+Af\\left(t+${x}-\\frac{${height}}{2}\\right)\\right)`,
     parametricDomain: {
       min: "",
@@ -56,17 +57,24 @@ export const interpolatedChars: Record<
   ],
 };
 
+const charWidth = 2;
+const charHeight = 4;
+
 export interface GenerateInterpolatedTextStateOptions {
   x?: number;
   y?: number;
+  charSpacing?: number;
+  lineSpacing?: number;
   targetFunction?: string | null;
-  color?: string | null;
+  color?: readonly [number, number, number] | null;
 }
 
 export const generateInterpolatedTextStateDefaultOptions: Required<GenerateInterpolatedTextStateOptions> =
   {
     x: 0,
     y: 0,
+    charSpacing: 0,
+    lineSpacing: 1,
     targetFunction: "f\\left(x\\right)=\\sin x",
     color: null,
   };
@@ -142,7 +150,7 @@ export function generateInterpolatedTextState(
 
     if (char === "\n") {
       x = 0;
-      y -= 5;
+      y -= charHeight + realOptions.lineSpacing;
       continue;
     }
 
@@ -158,17 +166,43 @@ export function generateInterpolatedTextState(
       });
 
       for (let expressionIndex = 0; expressionIndex < expressions.length; expressionIndex++) {
-        state.expressions.list.push({
+        const expression = {
           id: `che-${charIndex}-${expressionIndex}`,
           type: "expression",
           folderId,
-          color: realOptions.color,
           ...expressions[expressionIndex],
-        });
+        };
+
+        if (realOptions.color) {
+          expression.colorLatex = "C";
+        }
+
+        state.expressions.list.push(expression);
       }
     }
 
-    x += 2;
+    x += charWidth + realOptions.charSpacing;
+  }
+
+  if (realOptions.color) {
+    state.expressions.list.push(
+      {
+        id: "space3",
+        type: "expression",
+      },
+      {
+        id: "colorFolder",
+        type: "folder",
+        title: "Color",
+        collapsed: true,
+      },
+      {
+        id: "color",
+        type: "expression",
+        folderId: "colorFolder",
+        latex: `C=${desmosColorLaTeX(realOptions.color)}`,
+      },
+    );
   }
 
   return state;
