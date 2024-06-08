@@ -58,7 +58,8 @@ export const interpolatedChars: Record<
 export interface GenerateInterpolatedTextStateOptions {
   x?: number;
   y?: number;
-  targetFunction?: string;
+  targetFunction?: string | null;
+  color?: string | null;
 }
 
 export const generateInterpolatedTextStateDefaultOptions: Required<GenerateInterpolatedTextStateOptions> =
@@ -66,6 +67,7 @@ export const generateInterpolatedTextStateDefaultOptions: Required<GenerateInter
     x: 0,
     y: 0,
     targetFunction: "f\\left(x\\right)=\\sin x",
+    color: null,
   };
 
 export function generateInterpolatedTextState(
@@ -76,6 +78,7 @@ export function generateInterpolatedTextState(
     ...generateInterpolatedTextStateDefaultOptions,
     ...options,
   };
+  realOptions.targetFunction ||= generateInterpolatedTextStateDefaultOptions.targetFunction;
 
   const state = {
     version: 10,
@@ -119,10 +122,9 @@ export function generateInterpolatedTextState(
           id: "targetFunction",
           type: "expression",
           folderId: "targetFunctionFolder",
-          latex:
-            realOptions.targetFunction ||
-            generateInterpolatedTextStateDefaultOptions.targetFunction,
+          latex: realOptions.targetFunction,
           hidden: true,
+          color: "black",
         },
         {
           id: "space2",
@@ -146,7 +148,7 @@ export function generateInterpolatedTextState(
     if (interpolatedChars[char]) {
       const expressions = interpolatedChars[char](x, y);
 
-      const folderId = `char-${charIndex}`;
+      const folderId = `ch-${charIndex}`;
       state.expressions.list.push({
         id: folderId,
         type: "folder",
@@ -156,9 +158,10 @@ export function generateInterpolatedTextState(
 
       for (let expressionIndex = 0; expressionIndex < expressions.length; expressionIndex++) {
         state.expressions.list.push({
-          id: `char-${charIndex}-expression-${expressionIndex}`,
+          id: `che-${charIndex}-${expressionIndex}`,
           type: "expression",
           folderId,
+          color: realOptions.color,
           ...expressions[expressionIndex],
         });
       }

@@ -24,6 +24,9 @@ const config = {
           900: "#A5371B",
         },
       },
+      gridTemplateColumns: {
+        "1fr-16": "1fr 64px",
+      },
     },
   },
 
