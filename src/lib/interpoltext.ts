@@ -1,10 +1,16 @@
 import { desmosColorLaTeX } from "./color";
 
-function verticalLine(x: number, y: number, height: number) {
-  const heightStr = height.toString();
+function formatNumberOrList(value: number | number[]) {
+  return typeof value === "number" ? value.toString() : `[${value}]`;
+}
+
+function verticalLine(x: number | number[], y: number | number[], height: number | number[]) {
+  const xStr = formatNumberOrList(x);
+  const yStr = formatNumberOrList(y);
+  const heightStr = formatNumberOrList(height);
 
   return {
-    latex: `\\left(${x}a+At+A${x}-\\frac{A${height}}{2},ta+${y}a+Af\\left(t+${x}-\\frac{${height}}{2}\\right)\\right)`,
+    latex: `\\left(Xa+At+AX-\\frac{AH}{2},ta+Ya+Af\\left(t+X-\\frac{H}{2}\\right)\\right)\\operatorname{with}X=${xStr},Y=${yStr},H=${heightStr}`,
     parametricDomain: {
       min: "",
       max: heightStr,
@@ -53,6 +59,131 @@ export const interpolatedChars: Record<
     verticalLine(x, y, 4),
     {
       latex: `y=a\\left(\\operatorname{join}\\left(\\left(2+\\left[1,-1\\right]\\sqrt{4-1.8\\left(x-0.5\\right)^{2}}\\left\\{x\\ge0.5\\right\\}\\operatorname{with}x=x-${x}\\right),\\left[0,4\\right]\\left\\{0\\le x-${x}\\le0.5\\right\\}\\right)+${y}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  E: (x, y) => [
+    verticalLine(x, y, 4),
+    {
+      latex: `y=a\\left(\\operatorname{join}\\left(\\left[0,4\\right]\\left\\{2\\ge x\\ge0\\right\\},\\left[2\\left\\{1.5\\ge x\\ge0\\right\\}\\right]\\right)+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  F: (x, y) => [
+    verticalLine(x, y, 4),
+    {
+      latex: `y=a\\left(\\left[2\\left\\{1.5\\ge x\\ge0\\right\\},4\\left\\{2\\ge x\\ge0\\right\\}\\right]+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  G: (x, y) => [
+    {
+      latex: `y=a\\left(\\operatorname{join}\\left(2+\\left[1,-1\\right]\\sqrt{4-2\\left(x-\\sqrt{2}\\right)^{2}}\\left\\{x\\le2\\right\\}+${y},\\frac{3}{2}\\left\\{1\\le x\\le2\\right\\}+${y}\\right)\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+    verticalLine(x + 2, y + 0.18, 1.32),
+  ],
+  H: (x, y) => [
+    verticalLine([x, x + 2], y, 4),
+    {
+      latex: `y=a\\left(2\\left\\{0\\le x-${x}\\le2\\right\\}+${y}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  I: (x, y) => [
+    verticalLine(x + 1, y, 4),
+    {
+      latex: `y=a\\left(\\left[0,4\\right]\\left\\{2\\ge x-${x}\\ge0\\right\\}+${y}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  J: (x, y) => [
+    verticalLine(x + 2, y + 1, 3),
+    {
+      latex: `y=a\\left(1-\\sqrt{1-\\left(x-${x + 1}\\right)^{2}}+${y}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  K: (x, y) => [
+    verticalLine(x, y, 4),
+    {
+      latex: `y=a\\left(\\left[1.5,2.8\\right]+\\left[1.25,-1.4\\right]x\\left\\{2\\ge x\\ge\\left[0,0.49\\right]\\right\\}+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  L: (x, y) => [
+    verticalLine(x, y, 4),
+    {
+      latex: `y=a\\left(0\\left\\{2\\ge x-${x}\\ge0\\right\\}+${y}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  M: (x, y) => [
+    verticalLine([x, x + 2], y, 4),
+    {
+      latex: `y=a\\left(\\left[3,-3\\right]x+\\left[-2,4\\right]\\left\\{\\left[2,1\\right]\\ge x\\ge\\left[1,0\\right]\\right\\}+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  N: (x, y) => [
+    verticalLine([x, x + 2], y, 4),
+    {
+      latex: `y=a\\left(-2x+4\\left\\{0\\le x\\le2\\right\\}+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  O: (x, y) => [
+    {
+      latex: `y=a\\left(2+\\left[2,-2\\right]\\sqrt{1-\\left(x-${x + 1}\\right)^{2}}+${y}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  P: (x, y) => [
+    verticalLine(x, y, 4),
+    {
+      latex: `y=a\\left(3+\\left[1,-1\\right]\\sqrt{1-\\left(\\max\\left(x,1\\right)-1\\right)^{2}}\\left\\{0\\le x\\le2\\right\\}+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  Q: (x, y) => [
+    {
+      latex: `y=a\\left(\\operatorname{join}\\left(4-2x\\left\\{1.5\\le x\\le2\\right\\},2+\\left[2,-2\\right]\\sqrt{1-\\left(x-1\\right)^{2}}\\right)+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  R: (x, y) => [
+    verticalLine(x, y, 4),
+    {
+      latex: `y=a\\left(\\operatorname{join}\\left(4-2x\\left\\{1\\le x\\le2\\right\\},3+\\left[1,-1\\right]\\sqrt{1-\\left(\\max\\left(x,1\\right)-1\\right)^{2}}\\left\\{0\\le x\\le2\\right\\}\\right)+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  S: (x, y) => [
+    {
+      latex: `y=a\\left(\\operatorname{join}\\left(\\left[3,1\\right]+\\left[1,-1\\right]\\sqrt{1-\\left(x-1\\right)^{2}},2+2\\frac{\\sin^{-1}\\left(-x+1\\right)}{\\pi}\\right)+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  T: (x, y) => [
+    verticalLine(x + 1, y, 4),
+    {
+      latex: `y=a\\left(4\\left\\{0\\le x-${x}\\le2\\right\\}+${y}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  U: (x, y) => [
+    verticalLine([x, x + 2], y + 1, 3),
+    {
+      latex: `y=a\\left(1-\\sqrt{1-\\left(x-${x + 1}\\right)^{2}}+${y}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  V: (x, y) => [
+    {
+      latex: `y=a\\left(\\left[4,-4\\right]\\left(x-1\\right)\\left\\{\\left[1,0\\right]\\le x\\le\\left[2,1\\right]\\right\\}+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  W: (x, y) => [
+    {
+      latex: `y=a\\left(\\left[6,-6,6,-6\\right]\\left(x-\\frac{\\left[2,2,4,4\\right]}{3}\\right)\\left\\{\\left[\\frac{2}{3},0,\\frac{4}{3},\\frac{2}{3}\\right]\\le x\\le\\left[\\frac{4}{3},\\frac{2}{3},2,\\frac{4}{3}\\right]\\right\\}+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  X: (x, y) => [
+    {
+      latex: `y=a\\left(\\left[0,4\\right]+\\left[2,-2\\right]x\\left\\{0\\le x\\le2\\right\\}+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  Y: (x, y) => [
+    {
+      latex: `y=a\\left(\\left[0,4\\right]+\\left[2,-2\\right]x\\left\\{\\left[1,0\\right]\\le x\\le\\left[2,1\\right]\\right\\}+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+    verticalLine(x + 2, y, 2),
+  ],
+  Z: (x, y) => [
+    {
+      latex: `y=a\\left(\\left[0,4,2x\\right]\\left\\{0\\le x\\le2\\right\\}+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
     },
   ],
 };
