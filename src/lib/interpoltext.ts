@@ -186,6 +186,15 @@ export const interpolatedChars: Record<
       latex: `y=a\\left(\\left[0,4,2x\\right]\\left\\{0\\le x\\le2\\right\\}+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
     },
   ],
+  "?": (x, y) => [
+    {
+      latex: `y=a\\left(\\left[3+\\sqrt{1-\\left(x-1\\right)^{2}},2+2\\frac{\\sin^{-1}\\left(2x-3\\right)}{\\pi}\\right]+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+    verticalLine(x + 1, y + 0.5, 0.5),
+    {
+      latex: `\\left(${x + 1},${y}a+Af\\left(${x + 1}\\right)\\right)`,
+    },
+  ],
 };
 
 const charWidth = 2;
