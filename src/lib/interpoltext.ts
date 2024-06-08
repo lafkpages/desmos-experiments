@@ -38,19 +38,20 @@ export const interpolatedChars: Record<
     },
   ],
   B: (x, y) => [
-    {
-      latex: `\\left(${x}a+At+A${x}-2A,ta+${y}a+Af\\left(t+${x}-2\\right)\\right)`,
-      parametricDomain: {
-        min: "",
-        max: "4",
-      },
-      domain: {
-        min: "0",
-        max: "4",
-      },
-    },
+    verticalLine(x, y, 4),
     {
       latex: `y=\\left(a\\operatorname{join}\\left(3+\\left[1,-1\\right]\\sqrt{1-\\left(x-0.7\\right)^{2}}\\left\\{x-0.7\\ge0\\right\\}+Y,1+\\left[1,-1\\right]\\sqrt{1-\\left(x-1\\right)^{2}}\\left\\{x-1\\ge0\\right\\}+Y,\\left[Y,Y+2\\right]\\left\\{1>x>0\\right\\},\\left[Y+4\\right]\\left\\{0.7>x>0\\right\\}\\right)\\operatorname{with}x=x-${x},Y=${y}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  C: (x, y) => [
+    {
+      latex: `y=a\\left(2+\\left[1,-1\\right]\\sqrt{4-2\\left(x-\\sqrt{2}\\right)^{2}}\\left\\{x\\le2\\right\\}+${y}\\operatorname{with}x=x-${x}\\right)+Af\\left(x\\right)`,
+    },
+  ],
+  D: (x, y) => [
+    verticalLine(x, y, 4),
+    {
+      latex: `y=a\\left(\\operatorname{join}\\left(\\left(2+\\left[1,-1\\right]\\sqrt{4-1.8\\left(x-0.5\\right)^{2}}\\left\\{x\\ge0.5\\right\\}\\operatorname{with}x=x-${x}\\right),\\left[0,4\\right]\\left\\{0\\le x-${x}\\le0.5\\right\\}\\right)+${y}\\right)+Af\\left(x\\right)`,
     },
   ],
 };
