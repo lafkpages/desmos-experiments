@@ -197,8 +197,8 @@ export const interpolatedChars: Record<
   ],
 };
 
-const charWidth = 2;
-const charHeight = 4;
+export const charWidth = 2;
+export const charHeight = 4;
 
 export interface GenerateInterpolatedTextStateOptions {
   x?: number;

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { tick } from "svelte";
 
-  import { Button, CardPlaceholder, Input, Textarea } from "flowbite-svelte";
+  import { Accordion, AccordionItem, Button, Input, Label, Textarea } from "flowbite-svelte";
 
   import Desmos from "$components/Desmos.svelte";
   import { desmosColorLaTeX } from "$lib/color";
-  import { generateInterpolatedTextState } from "$lib/interpoltext";
+  import { charHeight, charWidth, generateInterpolatedTextState } from "$lib/interpoltext";
 
   let calculator: any;
 
@@ -17,8 +17,15 @@
       ? ([(colorNumber >> 16) & 255, (colorNumber >> 8) & 255, colorNumber & 255] as const)
       : null;
 
+  let charSpacing = "0";
+  let lineSpacing = "0";
+
   $: if (calculator) {
+    charSpacing;
+    lineSpacing;
     refreshCalculator(textToInterpolate);
+
+    console.debug({ charSpacing, lineSpacing });
   }
 
   $: if (calculator && colorRgb) {
@@ -44,6 +51,8 @@
 
     calculator.setState(
       generateInterpolatedTextState(textToInterpolate, {
+        charSpacing: parseFloat(charSpacing),
+        lineSpacing: parseFloat(lineSpacing),
         targetFunction,
         color: colorRgb,
       }),
@@ -80,5 +89,23 @@
     }}>Reset</Button
   >
 </div>
+
+<Accordion>
+  <AccordionItem>
+    <span slot="header">Options</span>
+
+    <div class="flex gap-2">
+      <div class="grow">
+        <Label for="charSpacing" class="block mb-2">Character spacing</Label>
+        <Input type="number" min={0} max={charWidth} id="charSpacing" bind:value={charSpacing} />
+      </div>
+
+      <div class="grow">
+        <Label for="lineSpacing" class="block mb-2">Line spacing</Label>
+        <Input type="number" min={0} max={charHeight} id="lineSpacing" bind:value={lineSpacing} />
+      </div>
+    </div>
+  </AccordionItem>
+</Accordion>
 
 <Desmos bind:calculator />
