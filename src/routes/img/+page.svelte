@@ -3,6 +3,7 @@
 
   import { onDestroy, onMount } from "svelte";
 
+  import { ComputeEngine } from "@cortex-js/compute-engine";
   import {
     Button,
     ButtonGroup,
@@ -24,10 +25,12 @@
   import Desmos from "$components/Desmos.svelte";
   import SettingsButton from "$components/SettingsButton.svelte";
   import { colorToHex } from "$lib/color";
+  import { latexToDesmosLatex } from "$lib/crazy-desmos-expressions/src/utils";
   import { ImgWorkerRequestType } from "$lib/img.worker";
   import ImgWorker from "$lib/img.worker?worker";
 
   let calculator: any;
+  let ce: ComputeEngine;
 
   const image = browser ? new Image() : null;
   let canvas: HTMLCanvasElement;
@@ -199,6 +202,8 @@
     }
     image.crossOrigin = "anonymous";
 
+    ce = new ComputeEngine();
+
     imgWorker = new ImgWorker();
 
     imgWorker.onmessage = (e) => {
@@ -217,6 +222,7 @@
 
       for (const shape of msg.shapes) {
         let latex: string | null = null;
+        let shouldSimlify = true;
 
         switch (shape.type) {
           case ShapeTypes.ELLIPSE: {
@@ -237,6 +243,7 @@
             y2 = image.height - y2;
 
             latex = `\\operatorname{polygon}\\left(\\left(${x1},${y1}\\right),\\left(${x2},${y1}\\right),\\left(${x2},${y2}\\right),\\left(${x1},${y2}\\right)\\right)\\left\\{i\\ge${iteration}\\right\\}`;
+            shouldSimlify = false;
             break;
           }
 
@@ -249,14 +256,19 @@
             y3 = image.height - y3;
 
             latex = `\\operatorname{polygon}\\left(\\left(${x1},${y1}\\right),\\left(${x2},${y2}\\right),\\left(${x3},${y3}\\right)\\right)\\left\\{i\\ge${iteration}\\right\\}`;
+            shouldSimlify = false;
             break;
           }
         }
 
         if (latex) {
+          const simplifiedLatex = shouldSimlify
+            ? latexToDesmosLatex(ce.parse(latex).simplify().latex)
+            : latex;
+
           const expression = {
             id: `iteration-${iteration}`,
-            latex,
+            latex: simplifiedLatex,
             color: colorToHex(shape.color),
             fillOpacity: (shape.color & 255) / 255,
             lineWidth: 0,

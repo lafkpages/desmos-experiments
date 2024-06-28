@@ -10,6 +10,7 @@
     "postinstall": "bun run ./src/lib/crazy-desmos-expressions/src/scripts/postinstall.ts"
   },
   "devDependencies": {
+    "@cortex-js/compute-engine": "^0.25.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.2.0",
     "@sveltejs/adapter-static": "^3.0.1",
     "@sveltejs/kit": "^2.0.0",
