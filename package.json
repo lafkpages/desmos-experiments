@@ -6,8 +6,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "format": "prettier --write .",
-    "postinstall": "bun run ./src/lib/crazy-desmos-expressions/src/scripts/postinstall.ts"
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "@cortex-js/compute-engine": "^0.25.1",
